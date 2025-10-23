@@ -31,4 +31,11 @@ add_executable(unit_tests unit_tests.cpp math_operations.cpp)
 target_link_libraries(unit_tests gtest gtest_main)
 
 # Add tests
-add_test(NAME UnitTests COMMAND unit_tests)
+add_test(
+  NAME UnitTests
+  COMMAND unit_tests
+)
+
+# Instructions for building and running tests
+message(STATUS "To build the tests, run: cmake --build .")
+message(STATUS "To execute the tests, run: ctest --output-on-failure")
