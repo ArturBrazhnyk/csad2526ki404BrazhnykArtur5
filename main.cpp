@@ -2,16 +2,9 @@
 #include "math_operations.h"
 
 int main() {
-    // Змінні для функції add
-    int a = 5;
-    int b = 10;
-
-    // Виклик функції add
-    int result = add(a, b);
-
-    // Виведення результату
-    std::cout << "Hello, World!" << std::endl;
-    std::cout << "The sum of " << a << " and " << b << " is: " << result << std::endl;
-
+    std::cout << "Hello, world!" << std::endl;
+    int a = 3;
+    int b = 4;
+    std::cout << "add(" << a << ", " << b << ") = " << add(a, b) << std::endl;
     return 0;
 }
