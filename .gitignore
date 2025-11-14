@@ -1,0 +1,8 @@
+# Generated CMake files
+/build/
+/_deps/
+
+# Other generated files
+*.exe
+*.obj
+*.lib

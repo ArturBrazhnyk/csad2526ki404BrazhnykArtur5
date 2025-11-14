@@ -1,0 +1,90 @@
+user: у мене є два файли math_operations.h та math_operations.cpp у   math_operations.h створіи функцію intadd(int a, int b); а інший заповни сам 
+copilot:
+#ifndef MATH_OPERATIONS_H
+#define MATH_OPERATIONS_H
+
+int add(int a, int b);
+
+#endif // MATH_OPERATIONS_H
+
+#include "math_operations.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+user:я створив файл unit_tests.cpp потрібно щоб ти тепер Написав юніт тести
+  copilot:
+// GoogleTest-based unit tests for math_operations
+#include <gtest/gtest.h>
+#include <climits>
+#include "../math_operations.h"
+
+namespace {
+
+TEST(AdditionTests, ZeroAndIdentity) {
+    EXPECT_EQ(add(0, 0), 0);
+    EXPECT_EQ(add(0, 5), 5);
+    EXPECT_EQ(add(5, 0), 5);
+}
+
+TEST(AdditionTests, Positives) {
+    EXPECT_EQ(add(1, 2), 3);
+    EXPECT_EQ(add(100, 200), 300);
+}
+
+TEST(AdditionTests, NegativesAndMixed) {
+    EXPECT_EQ(add(-1, -1), -2);
+    EXPECT_EQ(add(-1, 1), 0);
+    EXPECT_EQ(add(-100, 50), -50);
+}
+
+TEST(AdditionTests, OverflowBehavior) {
+    // This test documents behaviour for large values; overflow behaviour is unspecified
+    EXPECT_EQ(add(INT_MAX, 0), INT_MAX);
+}
+
+} // namespace
+// *** ФУНКЦІЯ int main() ВИДАЛЕНА ЗГІДНО З ВИМОГАМИ ВИКЛАДАЧА ***
+user:дивися ти мені робив CMakeLits тепер потрібно щоб ти оновив код додав підтримку Google Test у мій CMakeLists.txt.
+  copilot:cmake_minimum_required(VERSION 3.14)
+
+project(csad2526ki404BrazhnykArtur5 VERSION 0.1.0 LANGUAGES CXX)
+
+# Use C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Produce compile_commands.json for tooling
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Library for math operations
+add_library(math_operations STATIC math_operations.cpp)
+target_include_directories(math_operations PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Main executable
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE math_operations)
+
+# Optional install rule
+install(TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION bin)
+
+# Enable testing
+enable_testing()
+
+# Bring in GoogleTest using FetchContent
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
+)
+# Prevent overriding the parent project's compiler/linker settings on Windows
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+# Unit test target
+add_executable(unit_tests tests/unit_tests.cpp)
+target_link_libraries(unit_tests PRIVATE math_operations GTest::gtest_main)
+include(GoogleTest)
+gtest_discover_tests(unit_tests)
