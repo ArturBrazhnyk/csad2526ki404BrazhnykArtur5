@@ -43,4 +43,4 @@ if errorlevel 1 (
 
 echo All steps completed successfully.
 endlocal
-exit /b 
+exit /b 0
