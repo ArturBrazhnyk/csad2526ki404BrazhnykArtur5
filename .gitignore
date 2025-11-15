@@ -5,4 +5,4 @@
 # Other generated files
 *.exe
 *.obj
-*.lib
+*.libgit restore --staged build
