@@ -1,0 +1,57 @@
+name: Cross-Platform CMake CI
+
+on:
+  push:
+    branches:
+      - '**/develop**'
+      - '**/master**'
+  pull_request:
+    branches:
+      - '**/develop**'
+      - '**/master**'
+
+jobs:
+  cross_build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake
+
+      - name: Set up environment (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew update || true
+          brew install cmake || true
+
+      - name: Run CI script (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          chmod +x scripts/ci.sh
+          ./scripts/ci.sh
+
+      - name: Run CI script (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          scripts\ci-windows.bat
+
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.os }}
+          path: |
+            build/**
+
+      - name: Deploy (placeholder)
+        run: |
+          echo "Deploy step - replace with real deployment commands"
